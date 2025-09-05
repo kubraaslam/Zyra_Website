@@ -34,8 +34,7 @@ Route::get('/products', [ProductController::class, 'index'])->name('products.ind
 
 // About page
 Route::get('/about', function () {
-    return view('about');
-})->name('about');
+    return view('about'); })->name('about');
 
 // Auth routes
 require __DIR__ . '/auth.php';

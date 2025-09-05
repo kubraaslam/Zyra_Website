@@ -29,7 +29,7 @@
                 <li><a href="{{ route('dashboard') }}" class="hover:underline hover:text-gray-300">Dashboard</a></li>
                 <li><a href="{{ route('products.index') }}" class="hover:underline hover:text-gray-300">Products</a>
                 </li>
-                <li><a href="{{ route('about') }}" class="hover:underline hover:text-gray-300">About</a></li>
+                <li><a href="{{ route('about') }}" class="hover:underline hover:text-gray-300">About Us</a></li>
                 <li><a href="{{ route('cart') }}" class="hover:underline hover:text-gray-300">Cart</a></li>
             </ul>
         </div>
