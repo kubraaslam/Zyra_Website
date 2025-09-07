@@ -4,6 +4,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
 use App\Livewire\CartPage;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\OrderController;
 use Illuminate\Support\Facades\Route;
 
 // Dashboard (only for logged-in users)
@@ -33,6 +35,17 @@ Route::get('/about', function () {
 
 // Cart page
 Route::get('/cart', CartPage::class)->middleware('auth')->name('cart');
+
+// Show checkout page
+Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
+
+// Process checkout form
+Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+
+// Order History page
+Route::middleware(['auth'])->group(function () {
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders');
+});
 
 // Auth routes
 require __DIR__ . '/auth.php';

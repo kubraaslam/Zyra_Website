@@ -31,6 +31,7 @@
                 </li>
                 <li><a href="{{ route('about') }}" class="hover:underline hover:text-gray-300">About Us</a></li>
                 <li><a href="{{ route('cart') }}" class="hover:underline hover:text-gray-300">Cart</a></li>
+                <li><a href="{{ route('orders') }}" class="hover:underline hover:text-gray-300">Order History</a></li>
             </ul>
         </div>
 

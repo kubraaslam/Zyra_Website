@@ -53,7 +53,7 @@
                         <span>LKR {{ number_format($subtotal, 2) }}</span>
                     </div>
 
-                    <form action="{{ route('products') }}" method="get">
+                    <form action="{{ route('checkout') }}" method="get">
                         <button type="submit"
                             class="mt-6 w-full bg-gray-500 hover:bg-gray-400 text-white font-semibold py-2 rounded-lg text-lg">
                             CHECKOUT
@@ -61,18 +61,18 @@
                     </form>
                 </div>
             </div>
-
-            <!-- Order History -->
-            <div class="mt-10 text-center">
-                <form action="{{ route('products') }}" method="get">
-                    <button type="submit"
-                        class="bg-black text-white px-6 py-2 rounded-full font-semibold hover:bg-gray-800">
-                        Order History
-                    </button>
-                </form>
-            </div>
         @else
             <p class="text-gray-500">Your cart is empty.</p>
         @endif
+
+        <!-- Order History -->
+        <div class="mt-10 text-center">
+            <form action="{{ route('orders') }}" method="get">
+                <button type="submit"
+                    class="bg-black text-white px-6 py-2 rounded-full font-semibold hover:bg-gray-800">
+                    Order History
+                </button>
+            </form>
+        </div>
     </div>
 </div>
