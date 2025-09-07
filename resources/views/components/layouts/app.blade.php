@@ -34,7 +34,7 @@
     </div>
 
     <div x-data="{ show: false, message: '' }" x-show="show" x-transition x-text="message"
-        class="fixed top-10 right-10 bg-green-600 text-white px-4 py-2 rounded shadow-lg" style="display: none;"
+        class="fixed top-5 right-5 bg-green-600 text-white px-4 py-2 rounded shadow-lg" style="display: none;"
         @notify.window="
         message = $event.detail.message;
         show = true;

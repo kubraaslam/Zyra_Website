@@ -40,8 +40,7 @@
             @endphp
 
             @foreach($categories as $category)
-                <a href="{{ route('products.index') }}#{{ Str::slug($category['name']) }}"
-                    class="flex flex-col items-center">
+                <a href="{{ route('products') }}#{{ Str::slug($category['name']) }}" class="flex flex-col items-center">
                     <img src="{{ asset('img/' . $category['image']) }}" alt="{{ $category['name'] }}"
                         class="w-16 h-16 md:w-24 md:h-24 object-cover rounded-full mb-2 hover:opacity-80 transition">
                     <span class="text-sm font-medium">{{ $category['name'] }}</span>
@@ -61,7 +60,8 @@
                 <h2 class="text-2xl font-semibold mb-4">About Zyra</h2>
                 <p class="mb-4">
                     Discover jewelry that tells your story. At Zyra, we craft pieces that blend elegance, meaning, and
-                    modern design which is perfect for every style and every moment. Whether you're searching for a timeless
+                    modern design which is perfect for every style and every moment. Whether you're searching for a
+                    timeless
                     gift or a bold new look, Zyra is where your shine begins.
                 </p>
                 <a href="{{ route('about') }}"
@@ -76,7 +76,7 @@
     <section class="text-center my-8 px-8">
         <div class="mb-4 flex flex-col sm:flex-row sm:justify-between sm:items-center">
             <h2 class="text-xl font-semibold">Trendy Collection</h2>
-            <a href="{{ route('products.index') }}"
+            <a href="{{ route('products') }}"
                 class="text-xs md:text-sm bg-black text-white px-3 py-2 rounded hover:bg-gray-800 self-end mt-2">
                 View More >>
             </a>
@@ -90,13 +90,7 @@
                     <p class="mt-2 font-medium">{{ $product->name }}</p>
                     <p class="text-sm text-gray-600">LKR {{ number_format($product->price, 2) }}</p>
 
-                    <form method="POST" action="{{ route('cart.add') }}" class="add-to-cart-form">
-                        @csrf
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
-                        <button type="submit" class="mt-2 bg-black text-white px-4 py-1 text-sm rounded hover:bg-gray-600">
-                            Add to Cart
-                        </button>
-                    </form>
+                    <livewire:add-to-cart :product-id="$product->id" />
                 </div>
             @empty
                 <p class="col-span-full text-center text-gray-500">No products available.</p>

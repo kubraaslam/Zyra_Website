@@ -12,8 +12,15 @@ class ProductController extends Controller
         // Fetch all products
         $products = Product::all();
 
-        // Pass to Blade
-        return view('products.index', compact('products'));
-    }
+        // Random 5 products for Trendy Collection
+        $specialOfferProducts = Product::all()->shuffle()->take(5);
 
+        $ringProducts = Product::where('category', 'Rings')->get();
+        $earringProducts = Product::where('category', 'Earrings')->get();
+        $braceletProducts = Product::where('category', 'Bracelets')->get();
+        $necklaceProducts = Product::where('category', 'Necklaces')->get();
+
+        // Pass to Blade
+        return view('products', compact('products', 'specialOfferProducts', 'ringProducts', 'earringProducts', 'braceletProducts', 'necklaceProducts'));
+    }
 }
