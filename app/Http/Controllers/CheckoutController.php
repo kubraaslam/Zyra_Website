@@ -91,12 +91,26 @@ class CheckoutController extends Controller
             ]);
         }
 
+        foreach ($cartItems as $item) {
+            // If product is a membership, activate it
+            if ($item->product->category === 'membership') {
+                $membershipEnd = now()->addMonth()->format('Y-m-d');
+                $user = Auth::user();
+                $user->update([
+                    'membership_plan' => strtolower($item->product->name),
+                    'membership_start' => now(),
+                    'membership_end' => $membershipEnd,
+                ]);
+            }
+        }
+
         // Clear cart
         Cart::where('user_id', $userId)->delete();
 
         return redirect()->route('checkout')->with([
             'success' => true,
-            'delivery_date' => $order->delivery_date->format('F d, Y')
+            'delivery_date' => $order->delivery_date->format('F d, Y'),
+            'membership_end' => $membershipEnd ?? null, // if a membership was purchased
         ]);
     }
 }

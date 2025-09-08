@@ -7,6 +7,10 @@
                 <h2 class="text-2xl font-bold mb-4">Thank you for your order!</h2>
                 <p class="mb-4">Your delivery is scheduled for <span
                         class="font-semibold">{{ session('delivery_date') }}</span>.</p>
+                @if(session('membership_end'))
+                    <p class="mb-2 text-green-600">Membership activated until:
+                        <strong>{{ session('membership_end') }}</strong></p>
+                @endif
                 <button @click="showThankYou = false; window.location='{{ route('dashboard') }}';"
                     class="bg-gray-900 text-white px-6 py-2 rounded hover:bg-gray-700">
                     Go to Dashboard

@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Livewire\CartPage;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\MembershipController;
 use Illuminate\Support\Facades\Route;
 
 // Dashboard (only for logged-in users)
@@ -46,6 +47,10 @@ Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout
 Route::middleware(['auth'])->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders');
 });
+
+Route::get('/membership', [MembershipController::class, 'show'])->name('membership');
+Route::post('/membership/subscribe', [MembershipController::class, 'subscribe'])
+    ->name('membership.subscribe');
 
 // Auth routes
 require __DIR__ . '/auth.php';
