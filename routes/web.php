@@ -7,14 +7,15 @@ use App\Livewire\CartPage;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\MembershipController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 
-// Dashboard (only for logged-in users)
-Route::get('/', [DashboardController::class, 'index'])
-    ->middleware('auth')
-    ->name('dashboard');
+// Welcome page (default landing page)
+Route::get('/', function () {
+    return view('welcome');
+})->name('welcome');
 
-// Dashboard route (optional, can remove if using home)
+// Dashboard (only for logged-in users)
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -51,6 +52,10 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/membership', [MembershipController::class, 'show'])->name('membership');
 Route::post('/membership/subscribe', [MembershipController::class, 'subscribe'])
     ->name('membership.subscribe');
+
+Route::middleware(['auth', 'is_admin'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+});
 
 // Auth routes
 require __DIR__ . '/auth.php';
