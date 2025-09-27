@@ -6,15 +6,15 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class IsAdmin
+class IsCustomer
 {
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->role === 'admin') {
+        if (Auth::check() && Auth::user()->role === 'user') {
             return $next($request);
         }
 
-        // redirect to customer dashboard
-        return redirect()->route('dashboard')->with('error', 'You are not authorized to access this page.');
+        // redirect to admin dashboard
+        return redirect()->route('admin.dashboard')->with('error', 'You are not authorized to access this page.');
     }
 }
