@@ -7,6 +7,8 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminOrderController;
+use App\Livewire\Admin\UserManagement;
 use App\Livewire\CartPage;
 use App\Livewire\Admin\ProductComponent;
 use Illuminate\Support\Facades\Route;
@@ -67,4 +69,10 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
 
     // Admin products CRUD
     Route::get('/admin/products', ProductComponent::class)->name('admin.products');
+
+    // Admin customers CRUD
+    Route::get('/admin/customers', UserManagement::class)->name('admin.customers');
+
+    // Admin all orders
+    Route::get('/admin/orders', AdminOrderController::class)->name('admin.orders');
 });
