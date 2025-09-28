@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\WithFileUploads;
 use App\Models\Product;
+use App\Models\OrderItem;
 
 class ProductComponent extends Component
 {
@@ -17,6 +18,7 @@ class ProductComponent extends Component
     public $name, $category, $price, $stock;
     public $image;
     public $image_url;
+    public $status = 'active';
     public $showDeleteModal = false; // controls delete modal
     public $productToDelete;         // holds the product being deleted
 
@@ -38,6 +40,7 @@ class ProductComponent extends Component
             $this->category = $product->category;
             $this->price = $product->price;
             $this->stock = $product->stock;
+            $this->status = $product->status;
             $this->image_url = $product->image_url;
         }
         $this->showModal = true;
@@ -60,13 +63,16 @@ class ProductComponent extends Component
             $imagePath = 'products/' . $filename;
         }
 
+        $finalStock = $this->status === 'discontinued' ? '-' : $this->stock;
+
         Product::updateOrCreate(
             ['id' => $this->productId],
             [
                 'name' => $this->name,
                 'category' => $this->category,
                 'price' => $this->price,
-                'stock' => $this->stock,
+                'stock' => $finalStock,
+                'status' => $this->status,
                 'image_url' => $imagePath,
             ]
         );
@@ -83,6 +89,7 @@ class ProductComponent extends Component
         $this->category = '';
         $this->price = '';
         $this->stock = '';
+        $this->status = 'active';
         $this->image_url = null;
     }
 
@@ -95,8 +102,24 @@ class ProductComponent extends Component
     public function deleteConfirmed()
     {
         if ($this->productToDelete) {
-            $this->productToDelete->delete();
-            session()->flash('success', 'Product deleted successfully!');
+            // check if this product exists in past orders
+            $hasOrders = OrderItem::where('product_id', $this->productToDelete->id)->exists();
+
+            if ($hasOrders) {
+                // Mark as discontinued instead of deleting
+                $this->productToDelete->update([
+                    'status' => 'discontinued',
+                    'stock' => null,
+                ]);
+                session()->flash(
+                    'error',
+                    'Cannot delete this product because it exists in past orders. It has been marked as discontinued.'
+                );
+            } else {
+                // Safe to delete
+                $this->productToDelete->delete();
+                session()->flash('success', 'Product deleted successfully!');
+            }
         }
 
         $this->showDeleteModal = false;

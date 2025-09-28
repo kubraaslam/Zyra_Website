@@ -42,6 +42,15 @@
                         <input wire:model.defer="stock" type="number" placeholder="15"
                             class="border p-2 w-full mb-3 rounded-lg text-sm focus:ring-black">
 
+                        <label for="status" class="font-semibold">Status</label>
+                        <select wire:model.defer="status"
+                            class="border p-2 w-full mb-3 rounded-lg text-sm focus:ring-black">
+                            <option value="active">Active</option>
+                            <option value="out_of_stock">Out of Stock</option>
+                            <option value="discontinued">Discontinued</option>
+                        </select>
+
+
                         <label for="image" class="font-semibold">Product Image</label>
                         <input type="file" wire:model="image"
                             class="border p-2 w-full mb-3 rounded-lg text-sm focus:ring-black">
@@ -58,6 +67,10 @@
 
         @if(session('success'))
             <div class="mb-3 text-green-600">{{ session('success') }}</div>
+        @endif
+
+        @if(session('error'))
+            <div class="mb-3 text-red-600">{{ session('error') }}</div>
         @endif
 
         <table class="table-auto w-full text-left text-sm">
@@ -87,9 +100,13 @@
                         <td class="p-6 font-semibold">{{ $product->name }}</td>
                         <td class="p-6">{{ $product->category }}</td>
                         <td class="p-6">Rs. {{ number_format($product->price, 2) }}</td>
-                        <td class="p-6">{{ $product->stock }}</td>
                         <td class="p-6">
-                            @if($product->stock > 0)
+                            {{ $product->stock === null ? '-' : $product->stock }}
+                        </td>
+                        <td class="p-6">
+                            @if($product->status === 'discontinued')
+                                <span class="bg-gray-500 text-white font-semibold px-2 py-1 rounded-full">Discontinued</span>
+                            @elseif($product->stock > 0)
                                 <span class="bg-black text-white font-semibold px-2 py-1 rounded-full">Active</span>
                             @else
                                 <span class="bg-red-500 text-white font-semibold px-2 py-1 rounded-full">Out of Stock</span>
