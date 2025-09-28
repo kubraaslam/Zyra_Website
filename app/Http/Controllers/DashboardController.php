@@ -11,12 +11,16 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
 
-        // All products
-        $allProducts = Product::all();
+        // Base query: exclude membership and only show active products
+        $query = Product::where('category', '!=', 'Membership')
+            ->where('status', 'active'); // Only active products
+
+        // All filtered products
+        $products = $query->get();
 
         // Random 5 products for Trendy Collection
-        $trendyProducts = Product::all()->shuffle()->take(5);
+        $trendyProducts = $query->inRandomOrder()->take(5)->get();
 
-        return view('dashboard', compact('allProducts', 'trendyProducts'));
+        return view('dashboard', compact('products', 'trendyProducts'));
     }
 }
