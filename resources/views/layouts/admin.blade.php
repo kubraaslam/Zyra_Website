@@ -14,11 +14,11 @@
 </head>
 
 <body class="font-sans antialiased bg-gray-100">
-    <div class="px-20 py-6 space-y-2">
-        <h1 class="text-4xl font-bold">Zyra Admin Dashboard</h1>
+    <div class="p-6 md:px-20 md:py-6 space-y-2">
+        <h1 class="text-3xl md:text-4xl font-bold">Zyra Admin Dashboard</h1>
         <p class="text-gray-500">Manage your jewelry store with ease</p>
 
-        <div class="py-6">
+        <div class="py-2 md:py-6">
             @include('layouts.admin-navigation')
         </div>
 
