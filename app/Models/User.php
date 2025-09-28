@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'status',
         'membership_plan',
         'membership_start',
         'membership_end',
