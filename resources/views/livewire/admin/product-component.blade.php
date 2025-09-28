@@ -98,8 +98,8 @@
                         </td>
 
                         <td class="p-6 font-semibold">{{ $product->name }}</td>
-                        <td class="p-6">{{ $product->category }}</td>
-                        <td class="p-6">Rs. {{ number_format($product->price, 2) }}</td>
+                        <td class="p-6">{{ ucfirst($product->category) }}</td>
+                        <td class="p-6">LKR {{ number_format($product->price, 2) }}</td>
                         <td class="p-6">
                             {{ $product->stock === null ? '-' : $product->stock }}
                         </td>

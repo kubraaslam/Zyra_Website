@@ -7,7 +7,7 @@
                 <h3 class="text-gray-800 font-semibold text-sm flex items-center justify-between">Total Revenue
                     <x-heroicon-o-chart-bar class="w-5 h-5 text-gray-500" />
                 </h3>
-                <p class="text-2xl font-bold pt-2">Rs. {{ number_format($totalRevenue, 0) }}</p>
+                <p class="text-2xl font-bold pt-2">LKR {{ number_format($totalRevenue, 0) }}</p>
             </div>
             <div
                 class="p-6 bg-white rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-lg transition-shadow">
@@ -48,7 +48,7 @@
                                 {{ $order->orderItems->count() }} items
                             </span>
                         </div>
-                        <span>Rs. {{ $order->total }}</span>
+                        <span>LKR {{ $order->total }}</span>
                     </div>
                 @endforeach
             </div>
@@ -62,10 +62,10 @@
                             <span>{{ $product->name }}</span>
 
                             <span class="text-sm font-normal text-gray-500">
-                                {{ $product->category}}
+                                {{ ucfirst($product->category) }}
                             </span>
                         </div>
-                        <span class="font-semibold">Rs. {{ $product->price }}</span>
+                        <span class="font-semibold">LKR {{ $product->price }}</span>
                     </div>
                 @endforeach
             </div>
