@@ -12,6 +12,10 @@ use App\Livewire\Admin\UserManagement;
 use App\Livewire\CartPage;
 use App\Livewire\Admin\ProductComponent;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Models\Order;
 
 // Welcome page
 Route::get('/', function () {
@@ -76,3 +80,62 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
     // Admin all orders
     Route::get('/admin/orders', AdminOrderController::class)->name('admin.orders');
 });
+
+//Exploit 1
+Route::get('/vuln-sql-users', function (Illuminate\Http\Request $request) {
+    $email = $request->query('email');
+    $user = DB::select("SELECT * FROM users WHERE email = $email"); // vulnerable
+    return $user ?: 'No user found';
+});
+
+Route::get('/safe-sql-users', function (Illuminate\Http\Request $request) {
+    $email = $request->query('email');
+    $user = DB::table('users')->where('email', $email)->first(); //safe from SQL injection
+    return $user ?: 'No user found';
+});
+
+//Exploit 2
+Route::get('/vuln-sql-products', function (Request $request) {
+    $category = $request->query('category'); // user-controlled
+    // VULNERABLE: concatenates user input directly into SQL
+    $rows = DB::select("SELECT * FROM products WHERE category = '$category'");
+    return response()->json($rows);
+});
+
+Route::get('/safe-sql-products', function (Request $request) {
+    $validated = $request->validate([
+        'category' => 'required|string|max:100'
+    ]);
+
+    $category = $validated['category'];
+
+    $rows = Product::select('id', 'name', 'price', 'category')
+        ->where('category', $category)
+        ->get();
+
+    return response()->json($rows);
+});
+
+//Exploit 3
+Route::get('/vuln-sql-orders', function (Request $request) {
+    $q = $request->query('q'); // user-controlled
+    // WARNING: concatenating into SQL -> SQLi possible
+    $rows = DB::select("SELECT * FROM orders WHERE id = $q");
+    return response()->json($rows);
+});
+
+Route::get('/safe-sql-orders', function (Request $request) {
+    $request->validate(['q' => 'required|integer|min:1']);
+    $id = $request->query('q');
+
+    $order = Order::findOrFail($id);
+
+    // authorize: allow owner or admin only
+    $user = $request->user();
+    if (!($user && ($user->id === $order->user_id || $user->is_admin))) {
+        return response()->json(['message' => 'Forbidden'], 403);
+    }
+
+    // return minimal set including sensitive fields only after auth
+    return response()->json($order->only(['id', 'delivery_address', 'phone', 'total', 'created_at']));
+})->middleware('auth');
